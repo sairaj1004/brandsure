@@ -1,0 +1,4 @@
+flask>=3.0
+reportlab>=4.0
+pdfplumber>=0.11
+gunicorn>=22.0

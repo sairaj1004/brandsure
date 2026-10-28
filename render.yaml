@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: brandsure
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    # One worker + threads: SQLite is a single file, so avoid several processes writing at once.
+    startCommand: gunicorn wsgi:app --workers 1 --threads 8 --timeout 120 --bind 0.0.0.0:$PORT
+    healthCheckPath: /api/health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.7
+      - key: BRANDSURE_SECRET
+        generateValue: true
+      - key: BRANDSURE_DATA
+        value: /tmp/brandsure-data
+      - key: BRANDSURE_DEMO
+        value: "1"
+      # Optional: add ANTHROPIC_API_KEY in the Render dashboard to enable the AI step.
